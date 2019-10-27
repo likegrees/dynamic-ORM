@@ -1,0 +1,2 @@
+FROM gradle:5.6.3-jdk11
+EXPOSE 8080
