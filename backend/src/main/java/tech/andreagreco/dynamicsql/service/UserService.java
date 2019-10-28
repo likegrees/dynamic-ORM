@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.andreagreco.dynamicsql.mapper.UserMapper;
 import tech.andreagreco.dynamicsql.model.User;
+import tech.andreagreco.dynamicsql.sqlutil.QueryBuilder;
+import tech.andreagreco.dynamicsql.sqlutil.util.SqlTriplets;
 
 import java.util.List;
 
@@ -16,10 +18,14 @@ public class UserService {
 
     public User getUser(long userId) {
 
-        SQL query = new SQL();
-        query.SELECT("*").FROM("users").WHERE("id = " + userId);
+        SqlTriplets<String[], String[], String[]> triplet = new SqlTriplets();
 
-        return userMapper.findById(query);
+        triplet.setColumn(new String[]{"name", "surname"});
+        triplet.setTable(new String[]{"users"});
+        triplet.setWhere(new String[]{"id = " + userId});
+
+        QueryBuilder builder = new QueryBuilder();
+        return userMapper.findById(builder.select(triplet));
     }
 
     public List<User> getAllUser() {
