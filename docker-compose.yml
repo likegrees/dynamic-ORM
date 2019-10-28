@@ -1,0 +1,26 @@
+version: '3'
+services:
+  backend:
+    container_name: backend
+    build:
+      context: ./services
+      dockerfile: ./backend/Dockerfile
+    volumes:
+      - ./backend:/backend
+    working_dir: /backend
+    command: gradle bootRun
+    tty: true
+
+  db:
+    container_name: pgdb
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=mybatis
+      - POSTGRES_PASSWORD=lXI9uey1qaZGh9Uyr0tNjGqbkPMcykPlEDC7S/j8Bec=
+      - PGDATA=/data/postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - ./db/data:/data/postgres
+      - ./db:/var/lib/postgresql
+    tty: true
