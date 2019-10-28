@@ -7,6 +7,9 @@ import tech.andreagreco.dynamicsql.sqlutil.QueryProvider;
 
 import java.util.List;
 
+/**
+ * @author LikeGrees
+ */
 @Mapper
 public interface UserMapper {
 

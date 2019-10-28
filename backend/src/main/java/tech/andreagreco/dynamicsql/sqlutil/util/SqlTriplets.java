@@ -1,7 +1,8 @@
 package tech.andreagreco.dynamicsql.sqlutil.util;
 
-import java.util.List;
-
+/**
+ * @author LikeGrees
+ */
 public class SqlTriplets<X, Y, Z> {
     private X column;
     private Y table;

@@ -10,6 +10,9 @@ import tech.andreagreco.dynamicsql.service.UserService;
 
 import java.util.List;
 
+/**
+ * @author LikeGrees
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {

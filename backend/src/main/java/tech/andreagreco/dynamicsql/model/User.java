@@ -1,13 +1,24 @@
 package tech.andreagreco.dynamicsql.model;
 
+import tech.andreagreco.dynamicsql.sqlutil.mapping.Column;
+import tech.andreagreco.dynamicsql.sqlutil.mapping.Table;
+
+/**
+ * @author LikeGrees
+ */
+@Table(name = "users")
 public class User {
 
+    @Column(name = "id")
     private long id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "surname")
     private String surname;
 
+    @Column(name = "username")
     private String username;
 
     public long getId() {
