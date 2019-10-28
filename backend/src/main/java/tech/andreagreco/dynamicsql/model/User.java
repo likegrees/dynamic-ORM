@@ -42,5 +42,4 @@ public class User {
         this.username = username;
     }
 
-    //has many cars
 }

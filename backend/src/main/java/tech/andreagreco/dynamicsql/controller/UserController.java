@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tech.andreagreco.dynamicsql.mapper.UserMapper;
 import tech.andreagreco.dynamicsql.model.User;
+import tech.andreagreco.dynamicsql.service.UserService;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,15 +19,15 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private UserMapper userMapper;
+    UserService userService;
 
     @GetMapping("/{userId}")
     public User getUserById (@PathVariable("userId") long userId) {
-        return userMapper.findById(userId);
+        return userService.getUser(userId);
     }
 
     @GetMapping("/all")
     public List<User> getUserById () {
-        return userMapper.findAll();
+        return userService.getAllUser();
     }
 }
