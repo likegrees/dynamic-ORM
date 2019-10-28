@@ -16,6 +16,9 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private QueryBuilder queryBuilder;
+
     public User getUser(long userId) {
 
         SqlTriplets<String[], String[], String[]> triplet = new SqlTriplets();
@@ -24,15 +27,15 @@ public class UserService {
         triplet.setTable(new String[]{"users"});
         triplet.setWhere(new String[]{"id = " + userId});
 
-        QueryBuilder builder = new QueryBuilder();
-        return userMapper.findById(builder.select(triplet));
+        return userMapper.findById(queryBuilder.select(triplet));
     }
 
     public List<User> getAllUser() {
 
-        SQL query = new SQL();
-        query.SELECT("*").FROM("users");
+        SqlTriplets<String[], String[], String[]> triplet = new SqlTriplets();
+        triplet.setColumn(new String[]{"*"});
+        triplet.setTable(new String[]{"users"});
 
-        return userMapper.findAll(query);
+        return userMapper.findAll(queryBuilder.select(triplet));
     }
 }
