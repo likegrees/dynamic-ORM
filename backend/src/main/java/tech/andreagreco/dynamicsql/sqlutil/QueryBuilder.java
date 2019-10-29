@@ -13,17 +13,17 @@ import java.util.Map;
 @Component
 public class QueryBuilder {
 
-    private SQL query;
-
     private Map<String, Map<String, String[]>> tablesMap;
+
+    private SQL query;
 
     @Autowired
     QueryBuilder(@Qualifier("tablesMap")Map<String, Map<String, String[]>> tablesMap) {
-        query = new SQL();
         this.tablesMap = tablesMap;
     }
 
     public QueryBuilder select(Class<?> table) {
+        query = new SQL();
         query.SELECT(tablesMap.get(table.getName()).get("columnsName"))
                 .FROM(tablesMap.get(table.getName()).get("tableName"));
         return this;
