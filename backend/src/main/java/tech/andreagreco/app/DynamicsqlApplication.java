@@ -4,7 +4,7 @@ import org.apache.ibatis.type.MappedTypes;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import tech.andreagreco.app.model.User;
+import tech.andreagreco.app.entity.User;
 
 @MappedTypes(User.class)
 @MapperScan("tech.andreagreco.app.mapper")

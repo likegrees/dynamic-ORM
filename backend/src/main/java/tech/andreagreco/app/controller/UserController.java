@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tech.andreagreco.app.model.User;
+import tech.andreagreco.app.entity.User;
 import tech.andreagreco.app.service.UserService;
 
 import java.util.List;
@@ -32,5 +32,15 @@ public class UserController {
     @GetMapping("/all")
     public List<User> getUserById () {
         return userService.getAllUser();
+    }
+
+    @GetMapping("/two/{userId}")
+    public User getUserTwoById (@PathVariable("userId") long userId) {
+        return userService.getUserTwo(userId);
+    }
+
+    @GetMapping("/two/all")
+    public List<User> getUserTwoById () {
+        return userService.getAllUserTwo();
     }
 }
