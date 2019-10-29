@@ -1,17 +1,22 @@
-package tech.andreagreco.dynamicsql.sqlutil;
+package tech.andreagreco.app.dynamicbatis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tech.andreagreco.dynamicsql.exception.TableNotDefinedException;
-import tech.andreagreco.dynamicsql.sqlutil.mapping.Column;
-import tech.andreagreco.dynamicsql.sqlutil.mapping.Table;
+import tech.andreagreco.app.dynamicbatis.exception.TableNotDefinedException;
+import tech.andreagreco.app.dynamicbatis.mapping.Column;
+import tech.andreagreco.app.dynamicbatis.mapping.Table;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Configuration
 public class SchemaMapper {
@@ -20,23 +25,22 @@ public class SchemaMapper {
     private String modelPackageName;
 
     @Bean(name = "tablesMap")
-    public Map<String, Map<String, String[]>> tablesMap() throws ClassNotFoundException, IOException {
+    public Map<String, Map<String, String[]>> tablesMap() throws ClassNotFoundException, IOException,
+            TableNotDefinedException {
 
         Map<String, Map<String, String[]>> tablesMap = new HashMap<>();
 
-        //TODO: get this from application.properties
         List<Class<?>> classList = getClasses();
-        classList.forEach(clazz -> {
-            if(isAnnotated(clazz)){
-                Map<String, String[]> tableColumns = new HashMap<>();
 
-                tableColumns.put("tableName", getTable(clazz));
-                tableColumns.put("columnsName", getColumns(clazz));
+        for (Class<?> clazz : classList) {
+            isAnnotated(clazz);
+            Map<String, String[]> tableColumns = new HashMap<>();
 
-                tablesMap.put(clazz.getName(), tableColumns);
-            }
-        });
+            tableColumns.put("tableName", getTable(clazz));
+            tableColumns.put("columnsName", getColumns(clazz));
 
+            tablesMap.put(clazz.getName(), tableColumns);
+        }
         return tablesMap;
     }
 
@@ -58,23 +62,15 @@ public class SchemaMapper {
         return columns.stream().toArray(String[]::new);
     }
 
-    //TODO: fix this bad thing
-    private boolean isAnnotated(Class<?> clazz) {
-        try{
-            if (Objects.isNull(clazz)) {
-                throw new TableNotDefinedException("The name of the table is null");
-            }
+    private void isAnnotated(Class<?> clazz) throws TableNotDefinedException {
+        if (Objects.isNull(clazz)) {
+            throw new TableNotDefinedException("The name of the table is null");
+        }
 
-            if (!clazz.isAnnotationPresent(Table.class)) {
-                throw new TableNotDefinedException("The class "
-                        + clazz.getSimpleName()
-                        + " is not annotated with JsonSerializable");
-            }
-
-            return true;
-        } catch(TableNotDefinedException e) {
-            e.printStackTrace();
-            return false;
+        if (!clazz.isAnnotationPresent(Table.class)) {
+            throw new TableNotDefinedException("The class "
+                    + clazz.getSimpleName()
+                    + " is not annotated with JsonSerializable");
         }
     }
 
@@ -84,19 +80,22 @@ public class SchemaMapper {
         assert classLoader != null;
         String path = modelPackageName.replace('.', '/');
         Enumeration<URL> resources = classLoader.getResources(path);
-        List<File> dirs = new ArrayList<File>();
+        List<File> dirs = new ArrayList<>();
         while (resources.hasMoreElements()) {
             URL resource = resources.nextElement();
             dirs.add(new File(resource.getFile()));
         }
-        List<Class<?>> classes = new ArrayList<Class<?>>();
+        List<Class<?>> classes = new ArrayList<>();
         for (File directory : dirs) {
             classes.addAll(findClasses(directory, modelPackageName));
         }
         return classes;
     }
+
+    // this will recursively find every class under the specified package
+    // would be better to check from the base package instead specify the model package ???
     private List<Class<?>> findClasses(File directory, String packageName) throws ClassNotFoundException {
-        List<Class<?>> classes = new ArrayList<Class<?>>();
+        List<Class<?>> classes = new ArrayList<>();
         if (!directory.exists()) {
             return classes;
         }

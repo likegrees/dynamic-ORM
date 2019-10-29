@@ -1,4 +1,4 @@
-package tech.andreagreco.dynamicsql.sqlutil;
+package tech.andreagreco.app.dynamicbatis;
 
 import org.apache.ibatis.jdbc.SQL;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class QueryBuilder {
     private SQL query;
 
     @Autowired
-    QueryBuilder(@Qualifier("tablesMap")Map<String, Map<String, String[]>> tablesMap) {
+    QueryBuilder(@Qualifier("tablesMap") Map<String, Map<String, String[]>> tablesMap) {
         this.tablesMap = tablesMap;
     }
 

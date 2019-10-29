@@ -1,10 +1,10 @@
-package tech.andreagreco.dynamicsql.service;
+package tech.andreagreco.app.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tech.andreagreco.dynamicsql.mapper.UserMapper;
-import tech.andreagreco.dynamicsql.model.User;
-import tech.andreagreco.dynamicsql.sqlutil.QueryBuilder;
+import tech.andreagreco.app.dynamicbatis.QueryBuilder;
+import tech.andreagreco.app.mapper.UserMapper;
+import tech.andreagreco.app.model.User;
 
 import java.util.List;
 
@@ -14,11 +14,15 @@ import java.util.List;
 @Component
 public class UserService {
 
-    @Autowired
     private UserMapper userMapper;
 
-    @Autowired
     private QueryBuilder queryBuilder;
+
+    @Autowired
+    UserService(UserMapper userMapper, QueryBuilder queryBuilder) {
+        this.userMapper = userMapper;
+        this.queryBuilder = queryBuilder;
+    }
 
     public User getUser(long userId) {
         return userMapper.findById(queryBuilder.select(User.class).where(new String[]{"id = " + userId}).build());

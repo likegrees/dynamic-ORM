@@ -1,4 +1,4 @@
-package tech.andreagreco.dynamicsql;
+package tech.andreagreco;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

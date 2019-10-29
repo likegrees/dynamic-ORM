@@ -1,4 +1,4 @@
-package tech.andreagreco.dynamicsql.sqlutil.mapping;
+package tech.andreagreco.app.dynamicbatis.mapping;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * @author LikeGrees
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
-public @interface Column {
+@Target(ElementType.TYPE)
+public @interface Table {
     String name() default "";
 }

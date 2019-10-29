@@ -1,4 +1,4 @@
-package tech.andreagreco.dynamicsql.sqlutil.util;
+package tech.andreagreco.app.dynamicbatis.util;
 
 /**
  * @author LikeGrees
