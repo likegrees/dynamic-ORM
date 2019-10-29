@@ -1,5 +1,6 @@
 package tech.andreagreco.dynamicsql.sqlutil;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tech.andreagreco.dynamicsql.exception.TableNotDefinedException;
@@ -15,13 +16,16 @@ import java.util.*;
 @Configuration
 public class SchemaMapper {
 
+    @Value("${model.package.name}")
+    private String modelPackageName;
+
     @Bean(name = "tablesMap")
     public Map<String, Map<String, String[]>> tablesMap() throws ClassNotFoundException, IOException {
 
         Map<String, Map<String, String[]>> tablesMap = new HashMap<>();
 
         //TODO: get this from application.properties
-        List<Class<?>> classList = getClasses("tech.andreagreco.dynamicsql.model");
+        List<Class<?>> classList = getClasses();
         classList.forEach(clazz -> {
             if(isAnnotated(clazz)){
                 Map<String, String[]> tableColumns = new HashMap<>();
@@ -74,11 +78,11 @@ public class SchemaMapper {
         }
     }
 
-    private List<Class<?>> getClasses(String packageName)
+    private List<Class<?>> getClasses()
             throws ClassNotFoundException, IOException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         assert classLoader != null;
-        String path = packageName.replace('.', '/');
+        String path = modelPackageName.replace('.', '/');
         Enumeration<URL> resources = classLoader.getResources(path);
         List<File> dirs = new ArrayList<File>();
         while (resources.hasMoreElements()) {
@@ -87,7 +91,7 @@ public class SchemaMapper {
         }
         List<Class<?>> classes = new ArrayList<Class<?>>();
         for (File directory : dirs) {
-            classes.addAll(findClasses(directory, packageName));
+            classes.addAll(findClasses(directory, modelPackageName));
         }
         return classes;
     }
